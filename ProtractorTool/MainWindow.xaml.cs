@@ -19,8 +19,8 @@ namespace ProtractorTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ProtractorPoint point1 = new ProtractorPoint();
-        private ProtractorPoint point2 = new ProtractorPoint();
+        public bool isPoint1Moving = false;
+        public bool isPoint2Moving = false;
 
         public MainWindow()
         {
@@ -33,16 +33,26 @@ namespace ProtractorTool
         {
             //Set Starting Position
             MoveObject(UnitCircle, 0, 0);
-            MoveObject(Circle1, -100, 0);
-            MoveObject(CirclePoint1, -100, 0);
-            MoveObject(Circle2, 100, 0);
-            MoveObject(CirclePoint2, 100, 0);
+            MoveObject(Circle1, -(UnitCircle.ActualHeight / 2), 0);
+            MoveObject(CirclePoint1, -(UnitCircle.ActualHeight / 2), 0);
+            MoveObject(Circle2, UnitCircle.ActualHeight / 2, 0);
+            MoveObject(CirclePoint2, UnitCircle.ActualHeight / 2, 0);
 
            
             Pos2.Text = GetX(Circle2) + "," + GetY(Circle2);
 
             UpdateText(Pos1, Circle1);
             UpdateText(Pos2, Circle2);
+
+            Line1.X1 = (ProtractorCanvas.ActualWidth / 2);
+            Line1.Y1 = (ProtractorCanvas.ActualHeight / 2);
+            Line2.X1 = (ProtractorCanvas.ActualWidth / 2);
+            Line2.Y1 = (ProtractorCanvas.ActualHeight / 2);
+
+            SetLine(CirclePoint1, Line1);
+            SetLine(CirclePoint2, Line2);
+
+            UpdateAngle();
         }
 
         private double GetX(FrameworkElement obj)
@@ -66,41 +76,22 @@ namespace ProtractorTool
             Close();
         }
 
-        private void MouseDown(Button Circle, ProtractorPoint point)
+        private void MouseDown(Button Circle,ref bool moving)
         {
-            /*if (point.pos == null)
-                point.pos = Circle.TransformToAncestor(ProtractorGrid).Transform(new Point(0, 0));
-            var mousePosition = Mouse.GetPosition(ProtractorGrid);
-            point.deltaX = mousePosition.X - point.pos.Value.X;
-            point.deltaY = mousePosition.Y - point.pos.Value.Y;*/
-            point.isMoving = true;
+            moving = true;
         }
-        private void MouseUp(Button Circle, ProtractorPoint point, Ellipse CirclePoint, TextBlock Pos)
+        private void MouseUp(Button Circle, ref bool moving, Ellipse CirclePoint, TextBlock Pos)
         {
-            point.isMoving = false;
+            moving = false;
 
             MoveObject(Circle, GetX(CirclePoint), GetY(CirclePoint));
 
             UpdateText(Pos, Circle);
-
-            /*
-            var circlePos = CirclePoint.TransformToAncestor(ProtractorGrid).Transform(new Point(0, 0));
-
-            var offsetX = point.pos.Value.X - circlePos.X + (22);
-            var offsetY = point.pos.Value.Y - circlePos.Y + (10);
-
-            Circle.RenderTransform = new TranslateTransform(-offsetX, -offsetY);
-
-            point.currentTT = Circle.RenderTransform as TranslateTransform;
-            */
-
-
-
         }
 
-        private void MouseMove(Button Circle, ProtractorPoint point, TextBlock Pos, Ellipse CirclePoint)
+        private void MouseMove(Button Circle, ref bool moving, TextBlock Pos, Ellipse CirclePoint, Line line)
         {
-            if (!point.isMoving) return;
+            if (!moving) return;
 
             var mousePoint = Mouse.GetPosition(ProtractorCanvas);
 
@@ -109,33 +100,29 @@ namespace ProtractorTool
 
             MoveObject(Circle, X, Y);
             PositionCircle(CirclePoint, Circle);
+            SetLine(CirclePoint, line);
 
             UpdateText(Pos, Circle);
+            UpdateAngle();
+        }
 
-            /*
-            var offsetX = (point.currentTT == null ? point.pos.Value.X : point.pos.Value.X - point.currentTT.X) + point.deltaX - mousePoint.X;
-            var offsetY = (point.currentTT == null ? point.pos.Value.Y : point.pos.Value.Y - point.currentTT.Y) + point.deltaY - mousePoint.Y;
+        private void UpdateAngle()
+        {
+            var Point1X = GetX(CirclePoint1);
+            var Point1Y = GetY(CirclePoint1);
+            var Point2X = GetX(CirclePoint2);
+            var Point2Y = GetY(CirclePoint2);
 
-            var trueX = point.pos.Value.X - offsetX;
-            var trueY = point.pos.Value.Y - offsetY;
-        
-            var min = 0;
-            var max = 450;
-            if (trueX > max) { offsetX += (trueX - max); trueX = max; }
-            if (trueY > max) { offsetY += (trueY - max); trueY = max; }
-            if (trueX < min) { offsetX += (trueX); trueX = min; }
-            if (trueY < min) { offsetY += (trueY); trueY = min; }
+            double dotProduct = Point1X * Point2X + Point1Y * Point2Y;
 
+            double magnitude1 = Math.Sqrt(Math.Pow(Point1X, 2) + Math.Pow(Point1Y, 2));
+            double magnitude2 = Math.Sqrt(Math.Pow(Point2X, 2) + Math.Pow(Point2Y, 2));
 
-            trueX -= (450 / 2);
-            trueY -= (450 / 2);
+            double angle = Math.Acos(dotProduct / (magnitude1 * magnitude2));
 
-            Pos.Text = trueX.ToString() + " , " + trueY.ToString() +": "+ ProtractorGrid.ActualHeight;
+            angle *= (180.0 / Math.PI);
 
-            Circle.RenderTransform = new TranslateTransform(-offsetX, -offsetY);
-
-            PositionCircle(CirclePoint, trueX, trueY);
-            */
+            Angle.Text = Math.Round(angle,2) + "°" ;
         }
 
         private void UpdateText(TextBlock pos, Button circle)
@@ -163,54 +150,41 @@ namespace ProtractorTool
 
             MoveObject(circle, newX, newY);
         }
-       //TODO: Draw Line
+       
+        private void SetLine(Ellipse circle, Line line)
+        {
+            line.X2 = GetX(circle) + (ProtractorCanvas.ActualWidth / 2);
+            line.Y2 = GetY(circle) + (ProtractorCanvas.ActualHeight / 2);
+        }
 
         private void Circle1_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MouseDown(Circle1, point1);
+            MouseDown(Circle1, ref isPoint1Moving);
         }
 
         private void Circle1_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            MouseUp(Circle1, point1,CirclePoint1, Pos1);
+            MouseUp(Circle1, ref isPoint1Moving,CirclePoint1, Pos1);
         }
 
         private void Circle1_MouseMove(object sender, MouseEventArgs e)
         {
-            MouseMove(Circle1, point1, Pos1,CirclePoint1);
+            MouseMove(Circle1, ref isPoint1Moving, Pos1,CirclePoint1,Line1);
         }
 
         private void Circle2_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MouseDown(Circle2, point2);
+            MouseDown(Circle2, ref isPoint2Moving);
         }
 
         private void Circle2_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            MouseUp(Circle2, point2,CirclePoint2, Pos2);
+            MouseUp(Circle2, ref isPoint2Moving,CirclePoint2, Pos2);
         }
 
         private void Circle2_MouseMove(object sender, MouseEventArgs e)
         {
-            MouseMove(Circle2, point2, Pos2,CirclePoint2);
-        }
-    }
-
-    public partial class ProtractorPoint
-    {
-        public bool isMoving;
-        public Point? pos;
-        public double deltaX;
-        public double deltaY;
-        public TranslateTransform currentTT;
-
-        public ProtractorPoint()
-        {
-            isMoving = false;
-            pos = null;
-            deltaX = 0;
-            deltaY = 0;
-            currentTT = null;
+            MouseMove(Circle2, ref isPoint2Moving, Pos2,CirclePoint2,Line2);
         }
     }
 }

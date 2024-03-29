@@ -51,13 +51,19 @@
             Width="20"
             Style="{DynamicResource CloseStyle}"
             Content=" X "  Foreground="Red"/>
+        <TextBlock x:Name="Angle"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+                   Margin="0,20,0,0"
+            FontSize="16"
+            Text="0°" Foreground="White" />
         <Canvas x:Name="ProtractorCanvas"
                 Width="450"
                 Height="450">
             <Ellipse x:Name="UnitCircle"
                 Fill="Transparent"
-                Height="200"
-                Width="200"
+                Height="400"
+                Width="400"
                 StrokeThickness="2"
                 Stroke="#FF0000FF"/>
             <Ellipse  Name="CirclePoint1" Grid.Column="1" Grid.Row="1"
@@ -72,6 +78,8 @@
                 Width="26"
                 StrokeThickness="2"
                 Stroke="#FF00FF00"></Ellipse>
+            <Line Name="Line1" X1="0" Y1="0" X2="100" Y2="100" StrokeThickness="2" Stroke="Yellow"></Line>
+            <Line Name="Line2" X1="0" Y1="0" X2="100" Y2="100" StrokeThickness="2" Stroke="Magenta"></Line>
             <Button Name="Circle1"
                 Height="26"
                 Width="26"
