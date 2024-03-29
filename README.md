@@ -10,6 +10,7 @@ A lightweight WPF Application for measuring angles on Windows.
 
 ## Planned Features
 - Installer with options to have ProtractorTool run on startup.
+- Add build options to GitHub so ProtractorTool installer can be downloaded from GitHub's releases page.
 - Prettier UI with custom graphics.
 - Ability to switch to radians instead of degrees.
 - Ability to disable "smallest angle" calculations to measure angles greater than 180 degrees. 
