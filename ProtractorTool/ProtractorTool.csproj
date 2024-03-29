@@ -88,5 +88,8 @@
   <ItemGroup>
     <Resource Include="protractor.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="close.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:ProtractorTool"
         xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" x:Class="ProtractorTool.MainWindow"
         mc:Ignorable="d"
-        Title="ProtractorTool" Height="500" Width="500" Background="#01ffffff" AllowsTransparency="True" WindowStyle="None">
+        Title="ProtractorTool" Height="400" Width="400" Background="#00ffffff" AllowsTransparency="True" WindowStyle="None">
     <Window.Resources>
         <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border BorderBrush="Black">
+                        <Border Background="#01ffffff" BorderBrush="Black">
                             <ContentPresenter/>
                         </Border>
                     </ControlTemplate>
@@ -20,12 +20,24 @@
             </Setter>
         </Style>
         <Style x:Key="CloseStyle" TargetType="{x:Type Button}">
+            
+            <Setter Property="Background">
+                <Setter.Value>
+                    <ImageBrush ImageSource="/ProtractorTool;component/close.png"/>
+                </Setter.Value>
+            </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border BorderBrush="Red" BorderThickness="1">
-                            <ContentPresenter/>
-                        </Border>
+                        <Grid>
+                            <Border Background="#01FFFFFF"/>
+                            <Border Background="{TemplateBinding Background}"
+                                BorderThickness="0"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -34,7 +46,6 @@
     <Grid x:Name="ProtractorGrid"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
-
         <TextBlock x:Name="Title"
             Margin="0"
             HorizontalAlignment="Left"
@@ -47,10 +58,9 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Click="CloseButtonClick"
-            Height="20"
-            Width="20"
-            Style="{DynamicResource CloseStyle}"
-            Content=" X "  Foreground="Red"/>
+            Height="25"
+            Width="25"
+            Style="{DynamicResource CloseStyle}"/>
         <TextBlock x:Name="Angle"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -58,14 +68,17 @@
             FontSize="16"
             Text="0°" Foreground="White" />
         <Canvas x:Name="ProtractorCanvas"
-                Width="450"
-                Height="450">
+                Width="374"
+                Height="374">
             <Ellipse x:Name="UnitCircle"
-                Fill="Transparent"
-                Height="400"
-                Width="400"
-                StrokeThickness="2"
-                Stroke="#FF0000FF"/>
+                Height="374"
+                Width="374"
+                StrokeThickness="0"
+                Stroke="Transparent">
+                <Ellipse.Fill>
+                    <ImageBrush ImageSource="/ProtractorTool;component/protractor.png"></ImageBrush>
+                </Ellipse.Fill>
+            </Ellipse>
             <Ellipse  Name="CirclePoint1" Grid.Column="1" Grid.Row="1"
                 Fill="Transparent"
                 Height="26"
@@ -93,7 +106,7 @@
                         Height="26"
                         Width="26"
                         StrokeThickness="2"
-                        Stroke="#FFFF0000"></Ellipse>
+                        Stroke="Transparent"></Ellipse>
                 </Grid>
             </Button>
             <Button Name="Circle2"
@@ -109,7 +122,7 @@
                         Height="26"
                         Width="26"
                         StrokeThickness="2"
-                        Stroke="#FFFF0000"></Ellipse>
+                        Stroke="Transparent"></Ellipse>
                 </Grid>
             </Button>
         </Canvas>
@@ -117,11 +130,11 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             FontSize="12"
-            Text="0,0" Foreground="White" />
+            Text="0,0" Foreground="Transparent" />
         <TextBlock x:Name="Pos2"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             FontSize="12"
-            Text="0,0" Foreground="White" />
+            Text="0,0" Foreground="Transparent" />
     </Grid>
 </Window>

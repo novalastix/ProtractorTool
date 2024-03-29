@@ -19,8 +19,10 @@ namespace ProtractorTool
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool isPoint1Moving = false;
-        public bool isPoint2Moving = false;
+        private bool isPoint1Moving = false;
+        private bool isPoint2Moving = false;
+
+        private bool debug = false;
 
         public MainWindow()
         {
@@ -53,6 +55,11 @@ namespace ProtractorTool
             SetLine(CirclePoint2, Line2);
 
             UpdateAngle();
+
+            if(debug)
+            {
+
+            }
         }
 
         private double GetX(FrameworkElement obj)
