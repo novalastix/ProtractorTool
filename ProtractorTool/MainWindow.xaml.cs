@@ -33,6 +33,8 @@ namespace ProtractorTool
 
         private void Ready(object sender, RoutedEventArgs e)
         {
+            TaskbarIcon.Visibility = Visibility.Collapsed;
+
             //Set Starting Position
             MoveObject(UnitCircle, 0, 0);
             MoveObject(Circle1, -(UnitCircle.ActualHeight / 2), 0);
@@ -80,8 +82,10 @@ namespace ProtractorTool
 
         private void CloseButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {
-            Close();
+            TaskbarIcon.Visibility = Visibility.Visible;
+            this.Hide();
         }
+       
 
         private void MouseDown(Button Circle,ref bool moving)
         {
@@ -193,5 +197,17 @@ namespace ProtractorTool
         {
             MouseMove(Circle2, ref isPoint2Moving, Pos2,CirclePoint2,Line2);
         }
+
+        private void TaskbarOpen(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+            Ready(sender,e);
+        }
+
+        private void TaskbarExit(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
     }
 }
