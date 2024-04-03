@@ -37,12 +37,12 @@ namespace ProtractorTool
 
             //Set Starting Position
             MoveObject(UnitCircle, 0, 0);
-            MoveObject(Circle1, -(UnitCircle.ActualHeight / 2), 0);
-            MoveObject(CirclePoint1, -(UnitCircle.ActualHeight / 2), 0);
-            MoveObject(Circle2, UnitCircle.ActualHeight / 2, 0);
-            MoveObject(CirclePoint2, UnitCircle.ActualHeight / 2, 0);
+            SetAngle(Circle1, 45);
+            SetAngle(CirclePoint1, 45);
+            SetAngle(Circle2, -45);
+            SetAngle(CirclePoint2, -45);
 
-           
+
             Pos2.Text = GetX(Circle2) + "," + GetY(Circle2);
 
             UpdateText(Pos1, Circle1);
@@ -78,6 +78,16 @@ namespace ProtractorTool
         {
             Canvas.SetLeft(obj, X-(obj.ActualWidth/2) + (ProtractorCanvas.ActualWidth / 2));
             Canvas.SetTop(obj, Y- (obj.ActualHeight / 2) + (ProtractorCanvas.ActualHeight / 2));
+        }
+
+        private void SetAngle(FrameworkElement obj, double degrees)
+        {
+            double radians = degrees * Math.PI / 180.0;
+
+            double x = (UnitCircle.ActualHeight / 2) * Math.Cos(radians);
+            double y = (UnitCircle.ActualHeight / 2) * Math.Sin(radians);
+
+            MoveObject(obj, x, y);
         }
 
         private void CloseButtonClick(object sender, System.Windows.RoutedEventArgs e)
@@ -150,6 +160,8 @@ namespace ProtractorTool
         {
             var X = GetX(button);
             var Y = GetY(button);
+
+            // if (X < 0) X = 0;
             
             var angle = Math.Atan(X/Y);
 
