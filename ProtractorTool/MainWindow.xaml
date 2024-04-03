@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="ProtractorTool" Height="400" Width="400" Background="#00ffffff" AllowsTransparency="True" WindowStyle="None">
     <Window.Resources>
+        
         <Style x:Key="TransparentStyle" TargetType="{x:Type Button}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -20,30 +21,31 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="CloseStyle" TargetType="{x:Type Button}">
-            
-            <Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush ImageSource="/ProtractorTool;component/close.png"/>
-                </Setter.Value>
-            </Setter>
+        
+        <Style x:Key="HeaderButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Width" Value="25"/>
+            <Setter Property="Height" Value="25"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Grid>
                             <Border Background="#01FFFFFF"/>
-                            <Border Background="{TemplateBinding Background}"
-                                BorderThickness="0"
-                                BorderBrush="{TemplateBinding BorderBrush}">
-                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <Border Background="{TemplateBinding Background}" BorderThickness="0" BorderBrush="{TemplateBinding BorderBrush}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                             </Border>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        
     </Window.Resources>
+    
     <Grid x:Name="ProtractorGrid"
         HorizontalAlignment="Stretch"
         VerticalAlignment="Stretch">
@@ -54,14 +56,26 @@
             FontSize="18"
             Text="ProtractorTool" Foreground="White" />
 
+        <Button x:Name="HideButton"
+            Margin="25 0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="HideButtonClick" 
+            Style="{StaticResource HeaderButtonStyle}">
+            <Button.Background>
+                <ImageBrush ImageSource="/ProtractorTool;component/Resources/hide.png"/>
+            </Button.Background>
+        </Button>
         <Button x:Name="CloseButton"
             Margin="0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
             Click="CloseButtonClick"
-            Height="25"
-            Width="25"
-            Style="{DynamicResource CloseStyle}"/>
+            Style="{StaticResource HeaderButtonStyle}">
+            <Button.Background>
+                <ImageBrush ImageSource="/ProtractorTool;component/Resources/close.png"/>
+            </Button.Background>
+        </Button>
         <TextBlock x:Name="Angle"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
@@ -77,7 +91,7 @@
                 StrokeThickness="0"
                 Stroke="Transparent">
                 <Ellipse.Fill>
-                    <ImageBrush ImageSource="/ProtractorTool;component/protractor.png"></ImageBrush>
+                    <ImageBrush ImageSource="/ProtractorTool;component/Resources/protractor.png"></ImageBrush>
                 </Ellipse.Fill>
             </Ellipse>
             <Ellipse  Name="CirclePoint1" Grid.Column="1" Grid.Row="1"
@@ -140,7 +154,7 @@
 
         <tb:TaskbarIcon Name="TaskbarIcon"
                         
-      IconSource="/ProtractorTool;component/icon.ico"
+      IconSource="/ProtractorTool;component/Resources/icon.ico"
       ToolTipText="ProtractorTool">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>

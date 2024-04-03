@@ -82,10 +82,15 @@ namespace ProtractorTool
 
         private void CloseButtonClick(object sender, System.Windows.RoutedEventArgs e)
         {
+            Close();
+        }
+
+        private void HideButtonClick(object sender, System.Windows.RoutedEventArgs e)
+        {
             TaskbarIcon.Visibility = Visibility.Visible;
             this.Hide();
         }
-       
+
 
         private void MouseDown(Button Circle,ref bool moving)
         {
